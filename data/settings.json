@@ -1,0 +1,116 @@
+[
+  {
+    "id": "studio_name",
+    "key": "studio_name",
+    "value": "24 Moments Photography",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "tagline",
+    "key": "tagline",
+    "value": "Capturing Moments. Defining Legacies.",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "phone",
+    "key": "phone",
+    "value": "+91 99999 99999",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "email",
+    "key": "email",
+    "value": "hello@24moments.com",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "address",
+    "key": "address",
+    "value": "Studio 24, Creative District, Mumbai, India",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "maps_embed",
+    "key": "maps_embed",
+    "value": "",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "instagram",
+    "key": "instagram",
+    "value": "https://instagram.com/24momentsphotography",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "facebook",
+    "key": "facebook",
+    "value": "https://facebook.com/24momentsphotography",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "youtube",
+    "key": "youtube",
+    "value": "https://youtube.com/@24momentsphotography",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "tiktok",
+    "key": "tiktok",
+    "value": "https://tiktok.com/@24momentsphotography",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "whatsapp",
+    "key": "whatsapp",
+    "value": "+919999999999",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "about_text",
+    "key": "about_text",
+    "value": "At 24 Moments Photography, we believe every frame tells a story. With over a decade of experience capturing life's most precious moments, our team of passionate photographers brings an editorial eye and cinematic sensibility to every project.",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "about_image",
+    "key": "about_image",
+    "value": "/uploads/about/1772795498740-IMG_1718.webp",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "stat_years_experience",
+    "key": "stat_years_experience",
+    "value": "5",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "stat_happy_clients",
+    "key": "stat_happy_clients",
+    "value": "100",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "stat_photos_delivered",
+    "key": "stat_photos_delivered",
+    "value": "2000",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "stat_events_covered",
+    "key": "stat_events_covered",
+    "value": "200",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "about_paragraph_1",
+    "key": "about_paragraph_1",
+    "value": "hellooo ",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  },
+  {
+    "id": "about_paragraph_2",
+    "key": "about_paragraph_2",
+    "value": "24 moments photography",
+    "updated_at": "2026-03-06T11:12:03.345Z"
+  }
+]

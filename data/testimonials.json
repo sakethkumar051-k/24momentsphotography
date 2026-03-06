@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "quote": "24 Moments captured our wedding with such grace and artistry. Every photograph tells a story we'll cherish forever.",
+    "client_name": "Priya & Rahul",
+    "event_type": "Wedding",
+    "sort_order": 1,
+    "created_at": "2026-03-06T11:11:11.016Z"
+  },
+  {
+    "id": "2",
+    "quote": "The team's ability to capture split-second moments during our tournament was extraordinary. Pure professionalism.",
+    "client_name": "Delhi Sports Club",
+    "event_type": "Sports Event",
+    "sort_order": 2,
+    "created_at": "2026-03-06T11:11:11.016Z"
+  },
+  {
+    "id": "3",
+    "quote": "Our corporate gala photographs exceeded all expectations. The attention to detail and lighting was impeccable.",
+    "client_name": "Anika Sharma, CEO",
+    "event_type": "Corporate Event",
+    "sort_order": 3,
+    "created_at": "2026-03-06T11:11:11.016Z"
+  },
+  {
+    "id": "4",
+    "quote": "The portrait session felt effortless. They made us feel completely natural, and the results were stunning.",
+    "client_name": "The Mehta Family",
+    "event_type": "Portrait Session",
+    "sort_order": 4,
+    "created_at": "2026-03-06T11:11:11.016Z"
+  }
+]
