@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
-import { storageBucket } from '@/lib/firebaseAdmin';
+import { cloudinary } from '@/lib/cloudinary';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,14 +25,25 @@ export async function POST(request: NextRequest) {
       .webp({ quality: 90 })
       .toBuffer();
 
-    const fileName = `about/${timestamp}-${baseName}.webp`;
-    const storageFile = storageBucket.file(fileName);
-    await storageFile.save(resized, {
-      contentType: 'image/webp',
-      public: true,
+    const publicId = `about/${timestamp}-${baseName}`;
+    const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'about',
+          public_id: publicId,
+          resource_type: 'image',
+          overwrite: true,
+        },
+        (error, result) => {
+          if (error || !result) return reject(error);
+          resolve(result as { secure_url: string });
+        }
+      );
+
+      uploadStream.end(resized);
     });
 
-    const url = `https://storage.googleapis.com/${storageBucket.name}/${fileName}`;
+    const url = result.secure_url;
     return NextResponse.json({ url });
   } catch (err) {
     console.error('About image upload error:', err);

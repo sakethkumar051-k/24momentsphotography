@@ -1,7 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
 import { IMAGE_SIZES } from '@/lib/constants';
-import { storageBucket } from '@/lib/firebaseAdmin';
+import { cloudinary } from '@/lib/cloudinary';
+
+async function uploadToCloudinary(buffer: Buffer, publicId: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'gallery',
+        public_id: publicId,
+        resource_type: 'image',
+        overwrite: true,
+      },
+      (error, result) => {
+        if (error || !result) return reject(error);
+        resolve(result.secure_url);
+      }
+    );
+
+    uploadStream.end(buffer);
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,14 +53,8 @@ export async function POST(request: NextRequest) {
         .webp({ quality: sizeName === 'thumbnail' ? 70 : sizeName === 'medium' ? 80 : 90 })
         .toBuffer();
 
-      const fileName = `gallery/${timestamp}-${baseName}-${sizeName}.webp`;
-      const file = storageBucket.file(fileName);
-      await file.save(resized, {
-        contentType: 'image/webp',
-        public: true,
-      });
-
-      urls[sizeName] = `https://storage.googleapis.com/${storageBucket.name}/${fileName}`;
+      const publicId = `${timestamp}-${baseName}-${sizeName}`;
+      urls[sizeName] = await uploadToCloudinary(resized, publicId);
     }
 
     return NextResponse.json({
