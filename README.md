@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 24 Moments Photography
+
+Premium photography portfolio website with a full admin dashboard.
+
+## Tech Stack
+
+- **Frontend**: Next.js 16 (App Router) + TypeScript
+- **Styling**: Tailwind CSS + Framer Motion
+- **Backend**: Next.js API Routes
+- **Database**: Supabase (PostgreSQL + Storage)
+- **Auth**: Supabase Auth
+- **Image Processing**: Sharp.js
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Set up Supabase
+
+1. Create a new Supabase project at [supabase.com](https://supabase.com)
+2. Run the SQL schema in `supabase-schema.sql` via the Supabase SQL Editor
+3. Create a storage bucket named `photos` and set it to public
+4. Create an admin user in Authentication > Users
+
+### 3. Configure environment variables
+
+Copy `.env.local` and fill in your values:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+### 4. Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) for the public site.
+Open [http://localhost:3000/admin/login](http://localhost:3000/admin/login) for the admin dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/
+    page.tsx              # Home (Hero, About, Gallery, Video, Services, Testimonials, Contact)
+    gallery/page.tsx      # Full gallery page
+    videos/page.tsx       # Video showcase page
+    contact/page.tsx      # Contact form page
+    admin/
+      login/page.tsx      # Admin login
+      dashboard/page.tsx  # Dashboard with stats
+      photos/page.tsx     # Photo manager (upload, edit, delete)
+      videos/page.tsx     # Video manager (YouTube embeds)
+      galleries/page.tsx  # Category manager
+      messages/page.tsx   # Contact form submissions
+      settings/page.tsx   # Site settings (info, social, about)
+    api/
+      photos/route.ts     # CRUD for photos
+      videos/route.ts     # CRUD for videos
+      categories/route.ts # CRUD for categories
+      messages/route.ts   # CRUD for messages
+      settings/route.ts   # Read/update site settings
+      contact/route.ts    # Contact form submission
+      upload/route.ts     # Image upload + Sharp processing
+      youtube/route.ts    # YouTube oEmbed fetch
+  components/
+    ui/                   # Reusable UI components
+    public/               # Public site sections
+    admin/                # Admin components
+  lib/                    # Utilities, Supabase client, constants
+  types/                  # TypeScript type definitions
+```
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+### Public Site
+- Full-viewport cinematic hero with typed tagline
+- Animated stats counters
+- Masonry photo gallery with category filtering and lightbox
+- YouTube video showcase with modal player
+- Service cards with hover effects
+- Auto-scrolling testimonials carousel
+- Contact form with email/date/event type fields
+- Custom gold cursor, smooth scroll, page transitions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Admin Dashboard
+- Protected routes with Supabase Auth
+- Photo upload with Sharp.js (auto-resize to thumbnail/medium/full, WebP conversion)
+- YouTube video management with oEmbed auto-fetch
+- Gallery category management
+- Message inbox with read/unread states
+- Site settings manager (business info, social links, about section)
+# 24momentsphotography
