@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -50,14 +50,28 @@ const placeholderVideos: Video[] = [
   },
 ];
 
-interface VideoSectionProps {
-  videos?: Video[];
-}
-
-export default function VideoSection({ videos }: VideoSectionProps) {
+export default function VideoSection() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [playingVideo, setPlayingVideo] = useState<Video | null>(null);
-  const displayVideos = videos?.length ? videos : placeholderVideos;
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/videos')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // Only show videos marked visible
+          setVideos(data.filter((v) => v.visible !== false));
+        } else {
+          setVideos([]);
+        }
+      })
+      .catch(() => setVideos([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const displayVideos = videos.length ? videos : placeholderVideos;
 
   const filteredVideos =
     activeCategory === 'all'
@@ -99,61 +113,69 @@ export default function VideoSection({ videos }: VideoSectionProps) {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
-            {filteredVideos.map((video, index) => (
-              <motion.div
-                key={video.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="group relative aspect-video bg-surface-light rounded-[3px] overflow-hidden cursor-pointer"
-                onClick={() => setPlayingVideo(video)}
-                data-cursor="pointer"
-              >
-                {video.thumbnail_url ? (
-                  <Image
-                    src={video.thumbnail_url}
-                    alt={video.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-surface">
-                    <span className="font-display text-6xl text-gold/10">24</span>
-                  </div>
-                )}
-
-                <div className="absolute inset-0 bg-background/40 group-hover:bg-background/60 transition-colors duration-300" />
-
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    className="w-16 h-16 rounded-full border-2 border-gold flex items-center justify-center bg-background/30 backdrop-blur-sm"
-                  >
-                    <svg
-                      width="20"
-                      height="24"
-                      viewBox="0 0 20 24"
-                      fill="none"
-                      className="ml-1"
-                    >
-                      <path d="M0 0L20 12L0 24V0Z" fill="#D4A017" />
-                    </svg>
-                  </motion.div>
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <h3 className="font-display text-xl text-foreground">{video.title}</h3>
-                  <p className="text-muted text-sm mt-1 line-clamp-1">{video.description}</p>
-                </div>
-              </motion.div>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="aspect-video bg-surface-light rounded-[3px] animate-pulse" />
             ))}
-          </AnimatePresence>
-        </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence mode="popLayout">
+              {filteredVideos.map((video, index) => (
+                <motion.div
+                  key={video.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="group relative aspect-video bg-surface-light rounded-[3px] overflow-hidden cursor-pointer"
+                  onClick={() => setPlayingVideo(video)}
+                  data-cursor="pointer"
+                >
+                  {video.thumbnail_url ? (
+                    <Image
+                      src={video.thumbnail_url}
+                      alt={video.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-surface">
+                      <span className="font-display text-6xl text-gold/10">24</span>
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-background/40 group-hover:bg-background/60 transition-colors duration-300" />
+
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="w-16 h-16 rounded-full border-2 border-gold flex items-center justify-center bg-background/30 backdrop-blur-sm"
+                    >
+                      <svg
+                        width="20"
+                        height="24"
+                        viewBox="0 0 20 24"
+                        fill="none"
+                        className="ml-1"
+                      >
+                        <path d="M0 0L20 12L0 24V0Z" fill="#D4A017" />
+                      </svg>
+                    </motion.div>
+                  </div>
+
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <h3 className="font-display text-xl text-foreground">{video.title}</h3>
+                    <p className="text-muted text-sm mt-1 line-clamp-1">{video.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
 
       <Modal
