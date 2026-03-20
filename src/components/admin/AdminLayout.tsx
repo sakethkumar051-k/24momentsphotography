@@ -86,18 +86,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
 
   useEffect(() => {
-    // Simple client-side guard; main protection is in middleware
-    const check = async () => {
-      try {
-        const res = await fetch('/api/admin/login', { method: 'POST', body: JSON.stringify({}) });
-        // This will normally 401; we only care that middleware already allowed access.
-      } catch {
-        // ignore
-      } finally {
-        setLoading(false);
-      }
-    };
-    check();
+    // Main protection is in middleware (server-side).
+    // This component just waits one tick to avoid layout flicker.
+    setLoading(false);
   }, []);
 
   const handleLogout = async () => {

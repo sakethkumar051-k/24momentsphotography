@@ -23,8 +23,8 @@ export default function AdminPhotosPage() {
   const fetchData = useCallback(async () => {
     try {
       const [photosRes, catsRes] = await Promise.all([
-        fetch('/api/photos?limit=200'),
-        fetch('/api/categories'),
+        fetch('/api/photos?limit=200', { credentials: 'include' }),
+        fetch('/api/categories', { credentials: 'include' }),
       ]);
       const photosData = await photosRes.json();
       const catsData = await catsRes.json();
@@ -50,7 +50,11 @@ export default function AdminPhotosPage() {
         const formData = new FormData();
         formData.append('file', file);
 
-        const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        });
         const uploadData = await uploadRes.json();
 
         if (uploadData.error) {
@@ -75,6 +79,7 @@ export default function AdminPhotosPage() {
             show_in_gallery: true,
             sort_order: photos.length,
           }),
+          credentials: 'include',
         });
       }
 
@@ -90,7 +95,7 @@ export default function AdminPhotosPage() {
     if (!confirm('Are you sure you want to delete this photo?')) return;
 
     try {
-      await fetch(`/api/photos?id=${id}`, { method: 'DELETE' });
+      await fetch(`/api/photos?id=${id}`, { method: 'DELETE', credentials: 'include' });
       setPhotos((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
       console.error('Delete error:', err);
@@ -125,6 +130,7 @@ export default function AdminPhotosPage() {
           show_in_gallery: editForm.show_in_gallery,
           tags: editForm.tags.split(',').map((t) => t.trim()).filter(Boolean),
         }),
+        credentials: 'include',
       });
 
       setEditingPhoto(null);
