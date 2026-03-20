@@ -5,6 +5,58 @@ import Image from 'next/image';
 import AdminLayout from '@/components/admin/AdminLayout';
 import type { Photo, Category } from '@/types/database';
 
+const MAX_UPLOAD_DIMENSION = 3000;
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4MB
+
+function compressImage(file: File): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+
+      let { width, height } = img;
+      if (width <= MAX_UPLOAD_DIMENSION && height <= MAX_UPLOAD_DIMENSION && file.size <= MAX_UPLOAD_BYTES) {
+        resolve(file);
+        return;
+      }
+
+      const scale = Math.min(MAX_UPLOAD_DIMENSION / width, MAX_UPLOAD_DIMENSION / height, 1);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      let quality = 0.85;
+      const tryCompress = () => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return reject(new Error('Compression failed'));
+            if (blob.size > MAX_UPLOAD_BYTES && quality > 0.3) {
+              quality -= 0.1;
+              tryCompress();
+            } else {
+              resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+            }
+          },
+          'image/jpeg',
+          quality,
+        );
+      };
+      tryCompress();
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(file);
+    };
+    img.src = url;
+  });
+}
+
 export default function AdminPhotosPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -46,7 +98,8 @@ export default function AdminPhotosPage() {
     setUploading(true);
 
     try {
-      for (const file of Array.from(files)) {
+      for (const rawFile of Array.from(files)) {
+        const file = await compressImage(rawFile);
         const formData = new FormData();
         formData.append('file', file);
 

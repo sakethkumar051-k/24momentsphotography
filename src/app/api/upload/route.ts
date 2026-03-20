@@ -1,24 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
-import { IMAGE_SIZES } from '@/lib/constants';
 import { cloudinary } from '@/lib/cloudinary';
 
-async function uploadToCloudinary(buffer: Buffer, publicId: string): Promise<string> {
+function uploadToCloudinary(buffer: Buffer, publicId: string): Promise<{ secure_url: string; width: number; height: number }> {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
+    const stream = cloudinary.uploader.upload_stream(
       {
         folder: 'gallery',
         public_id: publicId,
         resource_type: 'image',
         overwrite: true,
+        format: 'webp',
+        quality: 'auto:good',
       },
       (error, result) => {
         if (error || !result) return reject(error);
-        resolve(result.secure_url);
-      }
+        resolve({ secure_url: result.secure_url, width: result.width, height: result.height });
+      },
     );
-
-    uploadStream.end(buffer);
+    stream.end(buffer);
   });
 }
 
@@ -26,7 +26,6 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
@@ -34,33 +33,23 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const timestamp = Date.now();
     const baseName = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9-_]/g, '-');
+    const publicId = `${timestamp}-${baseName}`;
 
-    const metadata = await sharp(buffer).metadata();
-    const width = metadata.width || 0;
-    const height = metadata.height || 0;
+    const resized = await sharp(buffer)
+      .resize(2400, undefined, { withoutEnlargement: true })
+      .webp({ quality: 82 })
+      .toBuffer();
 
-    const sizes = {
-      thumbnail: IMAGE_SIZES.thumbnail,
-      medium: IMAGE_SIZES.medium,
-      full: IMAGE_SIZES.full,
-    } as const;
+    const { secure_url, width, height } = await uploadToCloudinary(resized, publicId);
 
-    const urls: Record<string, string> = {};
-
-    for (const [sizeName, maxWidth] of Object.entries(sizes)) {
-      const resized = await sharp(buffer)
-        .resize(maxWidth, undefined, { withoutEnlargement: true })
-        .webp({ quality: sizeName === 'thumbnail' ? 70 : sizeName === 'medium' ? 80 : 90 })
-        .toBuffer();
-
-      const publicId = `${timestamp}-${baseName}-${sizeName}`;
-      urls[sizeName] = await uploadToCloudinary(resized, publicId);
-    }
+    const baseUrl = secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+    const thumbUrl = secure_url.replace('/upload/', '/upload/c_fill,w_400,f_auto,q_auto/');
+    const mediumUrl = secure_url.replace('/upload/', '/upload/c_limit,w_1200,f_auto,q_auto/');
 
     return NextResponse.json({
-      url_thumbnail: urls.thumbnail,
-      url_medium: urls.medium,
-      url_full: urls.full,
+      url_thumbnail: thumbUrl,
+      url_medium: mediumUrl,
+      url_full: baseUrl,
       width,
       height,
     });

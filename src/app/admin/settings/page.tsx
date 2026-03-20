@@ -4,6 +4,45 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import AdminLayout from '@/components/admin/AdminLayout';
 
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+
+function compressForUpload(file: File, maxDim = 2400): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width <= maxDim && height <= maxDim && file.size <= MAX_UPLOAD_BYTES) {
+        resolve(file);
+        return;
+      }
+      const scale = Math.min(maxDim / width, maxDim / height, 1);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+      let quality = 0.85;
+      const tryCompress = () => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return reject(new Error('Compression failed'));
+            if (blob.size > MAX_UPLOAD_BYTES && quality > 0.3) { quality -= 0.1; tryCompress(); }
+            else resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+          },
+          'image/jpeg',
+          quality,
+        );
+      };
+      tryCompress();
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+}
+
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -36,13 +75,14 @@ export default function AdminSettingsPage() {
   };
 
   const handleAboutImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
     setUploadingAbout(true);
     try {
+      const file = await compressForUpload(rawFile);
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch('/api/upload/about', { method: 'POST', body: formData });
+      const res = await fetch('/api/upload/about', { method: 'POST', body: formData, credentials: 'include' });
       const data = await res.json();
       if (data?.url) {
         handleChange('about_image', data.url);
