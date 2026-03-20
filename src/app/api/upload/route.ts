@@ -22,6 +22,13 @@ function uploadToCloudinary(buffer: Buffer, publicId: string): Promise<{ secure_
   });
 }
 
+function buildCloudinaryTransformUrl(baseSecureUrl: string, transform: string) {
+  // Cloudinary URLs look like:
+  // https://res.cloudinary.com/<cloud>/.../upload/<version>/<public_id>.<format>
+  // We insert transforms right after `/upload/` so we can enforce a fixed crop ratio.
+  return baseSecureUrl.replace('/upload/', `/upload/${transform}/`);
+}
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -42,14 +49,16 @@ export async function POST(request: NextRequest) {
 
     const { secure_url, width, height } = await uploadToCloudinary(resized, publicId);
 
-    const baseUrl = secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-    const thumbUrl = secure_url.replace('/upload/', '/upload/c_fill,w_400,f_auto,q_auto/');
-    const mediumUrl = secure_url.replace('/upload/', '/upload/c_limit,w_1200,f_auto,q_auto/');
+    // Force a consistent `3:4` portrait crop everywhere the website displays gallery images.
+    // 3:4 => height = width * 4/3. We round to sensible integers.
+    const thumbUrl = buildCloudinaryTransformUrl(secure_url, 'c_fill,w_400,h_533,f_auto,q_auto');
+    const mediumUrl = buildCloudinaryTransformUrl(secure_url, 'c_fill,w_1200,h_1600,f_auto,q_auto');
+    const fullUrl = buildCloudinaryTransformUrl(secure_url, 'c_fill,w_2400,h_3200,f_auto,q_auto');
 
     return NextResponse.json({
       url_thumbnail: thumbUrl,
       url_medium: mediumUrl,
-      url_full: baseUrl,
+      url_full: fullUrl,
       width,
       height,
     });

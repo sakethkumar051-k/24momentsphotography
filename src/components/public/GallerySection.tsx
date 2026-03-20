@@ -208,8 +208,7 @@ export default function GallerySection({ mode = 'all' }: GallerySectionProps) {
                   data-cursor="pointer"
                 >
                   <div
-                    className="relative bg-surface-light"
-                    style={{ aspectRatio: `${photo.width}/${photo.height}` }}
+                    className="relative bg-surface-light aspect-3/4"
                   >
                     {photo.url_medium ? (
                       <Image

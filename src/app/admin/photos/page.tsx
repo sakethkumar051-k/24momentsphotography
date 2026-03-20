@@ -242,7 +242,7 @@ export default function AdminPhotosPage() {
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="aspect-square bg-gray-100 rounded-lg animate-pulse" />
+            <div key={i} className="aspect-3/4 bg-gray-100 rounded-lg animate-pulse" />
           ))}
         </div>
       ) : photos.length === 0 ? (
@@ -259,7 +259,7 @@ export default function AdminPhotosPage() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {photos.map((photo) => (
             <div key={photo.id} className="group relative bg-admin-surface rounded-lg border border-admin-border overflow-hidden">
-              <div className="relative aspect-square">
+              <div className="relative aspect-3/4">
                 {photo.url_thumbnail ? (
                   <Image
                     src={photo.url_thumbnail}
@@ -282,7 +282,7 @@ export default function AdminPhotosPage() {
               <div className="p-3">
                 <p className="text-sm font-medium text-admin-text truncate">{photo.title}</p>
                 <p className="text-xs text-admin-muted mt-0.5">
-                  {photo.width} x {photo.height}
+                  Cropped to a fixed <span className="font-semibold">3:4 portrait</span> frame
                 </p>
                 <p className="mt-1 text-[11px] text-admin-muted">
                   {(photo.show_on_home ?? true) && (photo.show_in_gallery ?? true)
