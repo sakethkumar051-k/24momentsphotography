@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Jost, Cinzel } from 'next/font/google';
 import SiteJsonLd from '@/components/seo/SiteJsonLd';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_SEO_KEYWORDS, SITE_TAGLINE } from '@/lib/constants';
 import { getSiteUrl } from '@/lib/site';
 import './globals.css';
 
@@ -26,39 +27,37 @@ const cinzel = Cinzel({
 });
 
 const siteUrl = getSiteUrl();
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  applicationName: SITE_NAME,
   title: {
-    default: '24 Moments Photography | Premium Photography Services',
-    template: '%s | 24 Moments Photography',
+    default: `${SITE_NAME} | team24momentsphotography.in`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    'Premium photography services for weddings, sports, corporate events, and portraits. Capturing moments. Defining legacies.',
+  description: SITE_DESCRIPTION,
   keywords: [
+    ...SITE_SEO_KEYWORDS,
     'photography',
     'wedding photography',
-    'sports photography',
-    'corporate photography',
-    'portrait photography',
-    '24 moments',
     'luxury photography',
   ],
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: '24 Moments Photography',
-    description: 'Capturing Moments. Defining Legacies.',
+    title: SITE_NAME,
+    description: SITE_TAGLINE,
     url: siteUrl,
-    siteName: '24 Moments Photography',
-    locale: 'en_US',
+    siteName: SITE_NAME,
+    locale: 'en_IN',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: '24 Moments Photography',
-    description: 'Capturing Moments. Defining Legacies.',
+    title: SITE_NAME,
+    description: SITE_TAGLINE,
   },
   robots: {
     index: true,
@@ -72,6 +71,9 @@ export const metadata: Metadata = {
     },
   },
   category: 'photography',
+  ...(googleVerification
+    ? { verification: { google: googleVerification } }
+    : {}),
 };
 
 export const viewport: Viewport = {
@@ -89,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${jost.variable} ${cinzel.variable}`}>
+    <html lang="en-IN" className={`${cormorant.variable} ${jost.variable} ${cinzel.variable}`}>
       <body className="bg-background text-foreground font-body antialiased">
         <SiteJsonLd />
         {children}

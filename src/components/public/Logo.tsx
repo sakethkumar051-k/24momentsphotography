@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 interface LogoProps {
@@ -7,32 +8,23 @@ interface LogoProps {
   animate?: boolean;
 }
 
+const heightClass = {
+  sm: 'h-8',
+  md: 'h-12',
+  lg: 'h-16',
+  xl: 'h-24 md:h-28 lg:h-32',
+} as const;
+
 export default function Logo({ size = 'md', animate = false }: LogoProps) {
-  const sizes = {
-    sm: { numeral: 'text-2xl', team: 'text-[8px]', photo: 'text-[6px]', gap: 'gap-0.5' },
-    md: { numeral: 'text-4xl', team: 'text-[10px]', photo: 'text-[8px]', gap: 'gap-1' },
-    lg: { numeral: 'text-6xl', team: 'text-sm', photo: 'text-[10px]', gap: 'gap-1.5' },
-    xl: { numeral: 'text-8xl', team: 'text-lg', photo: 'text-xs', gap: 'gap-2' },
-  };
-
-  const s = sizes[size];
-
-  const content = (
-    <>
-      <span className={`font-display font-bold ${s.numeral} text-gold-gradient leading-none`}>
-        24
-      </span>
-      <span
-        className={`font-display ${s.team} tracking-[0.25em] uppercase text-foreground leading-none`}
-      >
-        Moments
-      </span>
-      <span
-        className={`font-accent ${s.photo} tracking-[0.4em] uppercase text-gold leading-none`}
-      >
-        Photography
-      </span>
-    </>
+  const img = (
+    <Image
+      src="/logo.png"
+      alt="Team Moments Photography — stylized 24 with gold lettering"
+      width={1024}
+      height={1024}
+      className={`${heightClass[size]} w-auto object-contain`}
+      priority={size === 'xl'}
+    />
   );
 
   if (animate) {
@@ -41,16 +33,12 @@ export default function Logo({ size = 'md', animate = false }: LogoProps) {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-        className={`flex flex-col ${s.gap} items-center`}
+        className="inline-flex items-center justify-center"
       >
-        {content}
+        {img}
       </motion.div>
     );
   }
 
-  return (
-    <div className={`flex flex-col ${s.gap} items-center`}>
-      {content}
-    </div>
-  );
+  return <span className="inline-flex items-center justify-center">{img}</span>;
 }

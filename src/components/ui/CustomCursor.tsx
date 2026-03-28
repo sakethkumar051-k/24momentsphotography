@@ -25,6 +25,20 @@ export default function CustomCursor() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 768px)');
+    const syncCursorClass = () => {
+      document.documentElement.classList.toggle('custom-cursor-active', !mq.matches);
+    };
+    syncCursorClass();
+    mq.addEventListener('change', syncCursorClass);
+    return () => {
+      mq.removeEventListener('change', syncCursorClass);
+      document.documentElement.classList.remove('custom-cursor-active');
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     isMobile.current = window.matchMedia('(max-width: 768px)').matches;
     if (isMobile.current) return;
 

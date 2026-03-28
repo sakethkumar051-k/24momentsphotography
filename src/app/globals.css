@@ -25,14 +25,10 @@
   --font-accent: "Cinzel", Georgia, serif;
 }
 
-* {
+/* Hide native cursor only on public pages (see CustomCursor + html.custom-cursor-active). */
+html.custom-cursor-active,
+html.custom-cursor-active * {
   cursor: none !important;
-}
-
-@media (max-width: 768px) {
-  * {
-    cursor: auto !important;
-  }
 }
 
 ::selection {

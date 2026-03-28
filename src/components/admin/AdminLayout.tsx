@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Logo from '@/components/public/Logo';
 
 const navItems = [
   {
@@ -122,8 +123,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }`}
       >
         <div className="p-6 border-b border-admin-border">
-          <h1 className="font-display text-xl text-admin-text font-semibold">24 Moments</h1>
-          <p className="text-xs text-admin-muted mt-1">Admin Dashboard</p>
+          <Link href="/admin/dashboard" className="inline-block">
+            <Logo size="sm" />
+          </Link>
+          <p className="text-xs text-admin-muted mt-2">Admin Dashboard</p>
         </div>
 
         <nav className="p-4 space-y-1">

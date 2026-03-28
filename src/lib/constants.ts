@@ -1,7 +1,28 @@
 export const SITE_NAME = '24 Moments Photography';
 export const SITE_TAGLINE = 'Capturing Moments. Defining Legacies.';
+/** Meta description: include brand + domain phrases people search for. */
 export const SITE_DESCRIPTION =
-  'Premium photography services for weddings, sports, corporate events, and portraits. Based in India, serving worldwide.';
+  'Official website of 24 Moments Photography (Team 24 Moments). Wedding, corporate, sports, and portrait photography in Hyderabad and across India — team24momentsphotography.in.';
+
+/** Extra names Google and users may associate with your site (JSON-LD alternateName + keywords). */
+export const SITE_ALTERNATE_NAMES = [
+  'Team 24 Moments Photography',
+  'Team24 Moments Photography',
+  'team24momentsphotography',
+  'team24momentsphotography.in',
+  '24 Moments',
+] as const;
+
+export const SITE_SEO_KEYWORDS = [
+  'team24momentsphotography',
+  'team24momentsphotography.in',
+  '24 Moments Photography',
+  'Team 24 Moments',
+  'wedding photographer Hyderabad',
+  'corporate event photography India',
+  'sports photography',
+  'portrait photography',
+] as const;
 
 export const NAV_LINKS = [
   { label: 'Home', href: '/' },
@@ -39,12 +60,19 @@ export const VIDEO_CATEGORIES = [
 ] as const;
 
 export const SOCIAL_LINKS = {
-  instagram: 'https://instagram.com/24momentsphotography',
+  /** Match your live Instagram handle (used in footer + JSON-LD sameAs). */
+  instagram: 'https://www.instagram.com/24moments_photography_/',
   facebook: 'https://facebook.com/24momentsphotography',
-  youtube: 'https://youtube.com/@24momentsphotography',
+  youtube: 'https://www.youtube.com/@24momentsphotography',
   tiktok: 'https://tiktok.com/@24momentsphotography',
   whatsapp: 'https://wa.me/919999999999',
 } as const;
+
+/** Profiles to connect your website entity in Google (keep URLs real and public). */
+export const SITE_SAME_AS_URLS: readonly string[] = [
+  SOCIAL_LINKS.instagram,
+  SOCIAL_LINKS.youtube,
+];
 
 export const IMAGE_SIZES = {
   thumbnail: 400,
