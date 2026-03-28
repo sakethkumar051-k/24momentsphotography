@@ -9,22 +9,20 @@ interface LogoProps {
 }
 
 const sizeConfig = {
-  sm: { h: 'h-14', w: 'w-auto' },
-  md: { h: 'h-20', w: 'w-auto' },
-  lg: { h: 'h-28', w: 'w-auto' },
-  xl: { h: 'h-48 sm:h-56 md:h-64 lg:h-72', w: 'w-auto' },
+  sm: 'h-16 md:h-20',
+  md: 'h-24 md:h-28',
+  lg: 'h-32 md:h-36',
+  xl: 'h-56 sm:h-64 md:h-72 lg:h-80',
 } as const;
 
 export default function Logo({ size = 'md', animate = false }: LogoProps) {
-  const { h, w } = sizeConfig[size];
-
   const img = (
     <Image
       src="/logo.png"
       alt="24 Moments Photography"
       width={512}
       height={512}
-      className={`${h} ${w} object-contain`}
+      className={`${sizeConfig[size]} w-auto object-contain`}
       priority={size === 'xl' || size === 'sm'}
     />
   );

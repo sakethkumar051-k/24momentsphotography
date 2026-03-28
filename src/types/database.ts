@@ -103,6 +103,18 @@ export interface JobPosting {
   updated_at: string;
 }
 
+export interface JobApplication {
+  id: string;
+  job_id: string;
+  job_title: string;
+  name: string;
+  email: string;
+  phone: string;
+  portfolio_url: string;
+  message: string;
+  created_at: string;
+}
+
 export interface ClientReview {
   id: string;
   client_name: string;

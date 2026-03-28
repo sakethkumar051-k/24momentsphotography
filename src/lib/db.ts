@@ -8,6 +8,7 @@ import {
   type Service,
   type Testimonial,
   type JobPosting,
+  type JobApplication,
   type ClientReview,
 } from '@/types/database';
 
@@ -471,6 +472,23 @@ export async function saveJob(job: JobPosting): Promise<void> {
 
 export async function deleteJob(id: string): Promise<void> {
   await firestore.collection('jobs').doc(id).delete();
+}
+
+// --- Job Applications ---
+
+export async function getApplications(): Promise<JobApplication[]> {
+  const snapshot = await firestore.collection('applications').orderBy('created_at', 'desc').get();
+  const apps: JobApplication[] = [];
+  snapshot.forEach((doc) => apps.push(doc.data() as JobApplication));
+  return apps;
+}
+
+export async function saveApplication(app: JobApplication): Promise<void> {
+  await firestore.collection('applications').doc(app.id).set(app, { merge: true });
+}
+
+export async function deleteApplication(id: string): Promise<void> {
+  await firestore.collection('applications').doc(id).delete();
 }
 
 // --- Client Reviews ---

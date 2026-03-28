@@ -59,7 +59,7 @@ export default function ReviewsPage() {
       <SmoothScroll>
         <Navbar />
         <PageTransition>
-          <main className="pt-20">
+          <main className="pt-24">
             <section className="relative py-32 md:py-40 bg-background">
               <div className="max-w-5xl mx-auto px-6 md:px-12">
                 <SectionHeading
