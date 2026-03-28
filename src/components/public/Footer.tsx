@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Logo from './Logo';
@@ -39,7 +40,41 @@ const socialLinks = [
   },
 ];
 
+const FALLBACK_EMAIL = 'hello@24moments.com';
+const FALLBACK_PHONE = '+91 99999 99999';
+const FALLBACK_ADDRESS = 'Madhapur, Hyderabad\nTelangana, India';
+
 export default function Footer() {
+  const [settings, setSettings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && typeof data === 'object' && !data.error) setSettings(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const email = settings.email || FALLBACK_EMAIL;
+  const phone = settings.phone || FALLBACK_PHONE;
+  const address = settings.address || FALLBACK_ADDRESS;
+  const instagramUrl = settings.instagram || SOCIAL_LINKS.instagram;
+  const youtubeUrl = settings.youtube || SOCIAL_LINKS.youtube;
+  const whatsappNum = settings.whatsapp || '';
+
+  const dynamicSocials = socialLinks.map((s) => {
+    if (s.name === 'Instagram') return { ...s, href: instagramUrl };
+    if (s.name === 'YouTube') return { ...s, href: youtubeUrl };
+    if (s.name === 'WhatsApp' && whatsappNum) {
+      const digits = whatsappNum.replace(/\D/g, '');
+      return { ...s, href: `https://wa.me/${digits}` };
+    }
+    return s;
+  });
+
+  const addressLines = address.split('\n').filter(Boolean);
+
   return (
     <footer className="relative bg-background border-t border-border">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-20">
@@ -75,12 +110,23 @@ export default function Footer() {
               Contact
             </h4>
             <ul className="space-y-3 text-sm text-muted">
-              <li>hello@24moments.com</li>
-              <li>+91 99999 99999</li>
               <li>
-                Madhapur, Hyderabad
-                <br />
-                Telangana, India
+                <a href={`mailto:${email}`} className="hover:text-foreground transition-colors">
+                  {email}
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${phone.replace(/\s/g, '')}`} className="hover:text-foreground transition-colors">
+                  {phone}
+                </a>
+              </li>
+              <li>
+                {addressLines.map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    {i < addressLines.length - 1 && <br />}
+                  </span>
+                ))}
               </li>
               <li className="text-gold/90 font-accent text-[11px] tracking-wider pt-1">
                 team24momentsphotography.in
@@ -97,7 +143,7 @@ export default function Footer() {
               Connect
             </span>
             <div className="flex items-center gap-5">
-            {socialLinks.map((social) => (
+            {dynamicSocials.map((social) => (
               <motion.a
                 key={social.name}
                 href={social.href}
