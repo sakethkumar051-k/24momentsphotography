@@ -91,3 +91,25 @@ export interface DashboardStats {
   totalMessages: number;
   unreadMessages: number;
 }
+
+export interface JobPosting {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  type: 'full-time' | 'part-time' | 'freelance' | 'internship';
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientReview {
+  id: string;
+  client_name: string;
+  email: string;
+  event_type: string;
+  quote: string;
+  rating: number;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+}

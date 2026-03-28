@@ -26,10 +26,22 @@ const icons: Record<string, React.ReactNode> = {
       <circle cx="12" cy="7" r="4" />
     </svg>
   ),
-  book: (
+  cake: (
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-      <path d="M4 19.5A2.5 2.5 0 016.5 17H20" />
-      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
+      <path d="M20 21v-8a2 2 0 00-2-2H6a2 2 0 00-2 2v8" />
+      <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1" />
+      <path d="M2 21h20M7 8v3M12 8v3M17 8v3" />
+      <path d="M7 4h.01M12 4h.01M17 4h.01" />
+    </svg>
+  ),
+  baby: (
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <circle cx="12" cy="10" r="7" />
+      <path d="M9 13a3 3 0 006 0" />
+      <circle cx="9.5" cy="9" r="0.7" fill="currentColor" />
+      <circle cx="14.5" cy="9" r="0.7" fill="currentColor" />
+      <path d="M8 3c0 0 1.5-1 4-1s4 1 4 1" />
+      <path d="M5 17l-1 4M19 17l1 4" />
     </svg>
   ),
 };
@@ -56,9 +68,14 @@ const defaultServices = [
     icon: 'user',
   },
   {
-    title: 'Albums & Prints',
-    description: 'Museum-quality prints and handcrafted albums that transform your photographs into tangible heirlooms.',
-    icon: 'book',
+    title: 'Birthday Shoots',
+    description: 'Vibrant, fun-filled birthday photography — from milestone celebrations to themed party shoots for all ages.',
+    icon: 'cake',
+  },
+  {
+    title: 'Newborn Shoots',
+    description: 'Tender, carefully styled newborn sessions that beautifully capture your baby\'s earliest days.',
+    icon: 'baby',
   },
 ];
 

@@ -14,7 +14,7 @@ export default function GalleryPage() {
       <SmoothScroll>
         <Navbar />
         <PageTransition>
-          <main className="pt-24">
+          <main className="pt-20">
             {/* Full gallery: all photos with category filters */}
             <GallerySection mode="all" />
           </main>

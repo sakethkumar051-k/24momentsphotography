@@ -7,6 +7,8 @@ import {
   type SiteSettings,
   type Service,
   type Testimonial,
+  type JobPosting,
+  type ClientReview,
 } from '@/types/database';
 
 export async function getPhotos(): Promise<Photo[]> {
@@ -324,12 +326,21 @@ const defaultServices: Service[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: 'albums',
-    title: 'Albums & Prints',
+    id: 'birthday',
+    title: 'Birthday Shoots',
     description:
-      'Museum-quality prints and handcrafted albums that transform your photographs into tangible heirlooms.',
-    icon: 'book',
+      'Vibrant, fun-filled birthday photography — from milestone celebrations to themed party shoots for all ages.',
+    icon: 'cake',
     sort_order: 5,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'newborn',
+    title: 'Newborn Shoots',
+    description:
+      "Tender, carefully styled newborn sessions that beautifully capture your baby's earliest days.",
+    icon: 'baby',
+    sort_order: 6,
     created_at: new Date().toISOString(),
   },
 ];
@@ -443,5 +454,39 @@ export async function saveTestimonials(testimonials: Testimonial[]): Promise<voi
   });
 
   await batch.commit();
+}
+
+// --- Job Postings ---
+
+export async function getJobs(): Promise<JobPosting[]> {
+  const snapshot = await firestore.collection('jobs').orderBy('created_at', 'desc').get();
+  const jobs: JobPosting[] = [];
+  snapshot.forEach((doc) => jobs.push(doc.data() as JobPosting));
+  return jobs;
+}
+
+export async function saveJob(job: JobPosting): Promise<void> {
+  await firestore.collection('jobs').doc(job.id).set(job, { merge: true });
+}
+
+export async function deleteJob(id: string): Promise<void> {
+  await firestore.collection('jobs').doc(id).delete();
+}
+
+// --- Client Reviews ---
+
+export async function getReviews(): Promise<ClientReview[]> {
+  const snapshot = await firestore.collection('reviews').orderBy('created_at', 'desc').get();
+  const reviews: ClientReview[] = [];
+  snapshot.forEach((doc) => reviews.push(doc.data() as ClientReview));
+  return reviews;
+}
+
+export async function saveReview(review: ClientReview): Promise<void> {
+  await firestore.collection('reviews').doc(review.id).set(review, { merge: true });
+}
+
+export async function deleteReview(id: string): Promise<void> {
+  await firestore.collection('reviews').doc(id).delete();
 }
 

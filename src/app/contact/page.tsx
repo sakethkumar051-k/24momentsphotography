@@ -14,7 +14,7 @@ export default function ContactPage() {
       <SmoothScroll>
         <Navbar />
         <PageTransition>
-          <main className="pt-24">
+          <main className="pt-20">
             <ContactForm primaryHeading />
           </main>
         </PageTransition>

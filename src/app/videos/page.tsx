@@ -14,7 +14,7 @@ export default function VideosPage() {
       <SmoothScroll>
         <Navbar />
         <PageTransition>
-          <main className="pt-24">
+          <main className="pt-20">
             <VideoSection primaryHeading />
           </main>
         </PageTransition>
