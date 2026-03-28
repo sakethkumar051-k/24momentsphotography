@@ -18,7 +18,12 @@ interface FormData {
   referral_source: string;
 }
 
-export default function ContactForm() {
+interface ContactFormProps {
+  /** When true, section title is the page h1 (use on /contact only). */
+  primaryHeading?: boolean;
+}
+
+export default function ContactForm({ primaryHeading = false }: ContactFormProps) {
   const [formData, setFormData] = useState<FormData>({
     full_name: '',
     email: '',
@@ -77,6 +82,7 @@ export default function ContactForm() {
           label="Get in Touch"
           title="Book Your Session"
           subtitle="Tell us about your vision and let's create something extraordinary together"
+          titleLevel={primaryHeading ? 'h1' : 'h2'}
         />
 
         <AnimatePresence mode="wait">

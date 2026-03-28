@@ -109,6 +109,7 @@ export default function GallerySection({ mode = 'all' }: GallerySectionProps) {
             title="Full Portfolio"
             subtitle="Explore our work across weddings, sports, corporate events, portraits, and more"
             align="left"
+            titleLevel="h1"
           />
         )}
 

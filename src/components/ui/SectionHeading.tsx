@@ -7,6 +7,8 @@ interface SectionHeadingProps {
   title: string;
   subtitle?: string;
   align?: 'left' | 'center';
+  /** Use h1 on dedicated pages (one h1 per page); default h2 for sections. */
+  titleLevel?: 'h1' | 'h2';
 }
 
 export default function SectionHeading({
@@ -14,8 +16,10 @@ export default function SectionHeading({
   title,
   subtitle,
   align = 'center',
+  titleLevel = 'h2',
 }: SectionHeadingProps) {
   const alignment = align === 'center' ? 'text-center items-center' : 'text-left items-start';
+  const TitleTag = titleLevel;
 
   return (
     <motion.div
@@ -30,9 +34,9 @@ export default function SectionHeading({
           {label}
         </span>
       )}
-      <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-light text-foreground leading-tight">
+      <TitleTag className="font-display text-4xl md:text-5xl lg:text-6xl font-light text-foreground leading-tight">
         {title}
-      </h2>
+      </TitleTag>
       {subtitle && (
         <p className="mt-4 text-muted text-base md:text-lg max-w-2xl leading-relaxed">
           {subtitle}

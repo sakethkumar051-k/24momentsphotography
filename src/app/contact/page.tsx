@@ -15,7 +15,7 @@ export default function ContactPage() {
         <Navbar />
         <PageTransition>
           <main className="pt-20">
-            <ContactForm />
+            <ContactForm primaryHeading />
           </main>
         </PageTransition>
         <Footer />

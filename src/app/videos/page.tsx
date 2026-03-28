@@ -15,7 +15,7 @@ export default function VideosPage() {
         <Navbar />
         <PageTransition>
           <main className="pt-20">
-            <VideoSection />
+            <VideoSection primaryHeading />
           </main>
         </PageTransition>
         <Footer />

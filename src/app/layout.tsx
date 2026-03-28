@@ -1,5 +1,7 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Jost, Cinzel } from 'next/font/google';
+import SiteJsonLd from '@/components/seo/SiteJsonLd';
+import { getSiteUrl } from '@/lib/site';
 import './globals.css';
 
 const cormorant = Cormorant_Garamond({
@@ -23,7 +25,10 @@ const cinzel = Cinzel({
   display: 'swap',
 });
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: '24 Moments Photography | Premium Photography Services',
     template: '%s | 24 Moments Photography',
@@ -39,10 +44,13 @@ export const metadata: Metadata = {
     '24 moments',
     'luxury photography',
   ],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: '24 Moments Photography',
     description: 'Capturing Moments. Defining Legacies.',
-    url: process.env.NEXT_PUBLIC_SITE_URL,
+    url: siteUrl,
     siteName: '24 Moments Photography',
     locale: 'en_US',
     type: 'website',
@@ -55,7 +63,24 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
   },
+  category: 'photography',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#faf8f5' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
 };
 
 export default function RootLayout({
@@ -66,6 +91,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${jost.variable} ${cinzel.variable}`}>
       <body className="bg-background text-foreground font-body antialiased">
+        <SiteJsonLd />
         {children}
       </body>
     </html>

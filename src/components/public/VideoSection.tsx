@@ -50,7 +50,12 @@ const placeholderVideos: Video[] = [
   },
 ];
 
-export default function VideoSection() {
+interface VideoSectionProps {
+  /** When true, section title is the page h1 (use on /videos only). */
+  primaryHeading?: boolean;
+}
+
+export default function VideoSection({ primaryHeading = false }: VideoSectionProps) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [playingVideo, setPlayingVideo] = useState<Video | null>(null);
   const [videos, setVideos] = useState<Video[]>([]);
@@ -85,6 +90,7 @@ export default function VideoSection() {
           label="Films"
           title="Motion Stories"
           subtitle="Cinematic narratives that bring your moments to life"
+          titleLevel={primaryHeading ? 'h1' : 'h2'}
         />
 
         <div className="flex flex-wrap justify-center gap-4 mb-16">

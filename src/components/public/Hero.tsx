@@ -20,6 +20,9 @@ export default function Hero() {
 
   return (
     <section ref={containerRef} className="relative h-screen w-full overflow-hidden bg-background">
+      <h1 className="absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0">
+        24 Moments Photography — premium wedding, event, sports, and portrait photography
+      </h1>
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,160,23,0.03)_0%,_transparent_70%)]" />
         <motion.div
