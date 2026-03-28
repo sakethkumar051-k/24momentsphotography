@@ -8,11 +8,12 @@ interface LogoProps {
   animate?: boolean;
 }
 
+/** Heights tuned for a square mark: nav bar is h-20; hero should read clearly at a glance. */
 const heightClass = {
-  sm: 'h-8',
-  md: 'h-12',
-  lg: 'h-16',
-  xl: 'h-24 md:h-28 lg:h-32',
+  sm: 'h-12 min-h-[48px] sm:h-14 sm:min-h-[56px] max-h-[4.5rem]',
+  md: 'h-16 md:h-20',
+  lg: 'h-24 sm:h-28 md:h-32',
+  xl: 'h-40 sm:h-48 md:h-56 lg:h-64 xl:h-72',
 } as const;
 
 export default function Logo({ size = 'md', animate = false }: LogoProps) {
