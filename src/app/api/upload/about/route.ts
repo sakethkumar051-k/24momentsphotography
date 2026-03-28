@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
-import { cloudinary } from '@/lib/cloudinary';
+import { getCloudinary } from '@/lib/cloudinary';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     const publicId = `about/${timestamp}-${baseName}`;
     const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
+      const uploadStream = getCloudinary().uploader.upload_stream(
         {
           folder: 'about',
           public_id: publicId,

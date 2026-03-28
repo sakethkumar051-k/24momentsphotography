@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
-import { cloudinary } from '@/lib/cloudinary';
+import { getCloudinary } from '@/lib/cloudinary';
 
 function uploadToCloudinary(buffer: Buffer, publicId: string): Promise<{ secure_url: string; width: number; height: number }> {
   return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
+    const stream = getCloudinary().uploader.upload_stream(
       {
         folder: 'gallery',
         public_id: publicId,
